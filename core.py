@@ -28,7 +28,7 @@ class Chain(object):
 			mobj = mdagmod.createNode("joint")
 			mdagmod.doIt()
 	
-			joint = mautil.Transform(om.MFnDependencyNode(mobj).name())	
+			joint = mautil.Transform(om.MFnDagNode(mobj).getPath())	
 			joint.setName(name)
 			joint.setTranslation(mvec, mautil.Space.WORLD)
 
@@ -36,15 +36,7 @@ class Chain(object):
 
 		for jnt, i in enumerate(self._joints):
 			#BUILD HIERARCHY
-
-
-
-
-
-
-
-
-
+			pass
 
 
 	def getJoints(self):
