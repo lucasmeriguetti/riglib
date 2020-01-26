@@ -1,10 +1,8 @@
 import maya.cmds as cmds
 import maya.api.OpenMaya as om 
 
-import riglib.mautil
-reload (riglib.mautil)
-
-from riglib.mautil import SelectionList, Transform
+import riglib.mautil as mautil
+reload (mautil)
 
 class Chain(object):
 	_count = 0
@@ -18,13 +16,36 @@ class Chain(object):
 		self.createChainJoints()
 
 	def createChainJoints(self):
-		"""Duplicate and constraint to input joints"""
-		for i, j in enumerate(self._inputJoints):
-			#get joint position
-			mvec = Transform(j).translation()
-			posAxes = mvec.x, mvec.y, mvec.z
-			joint = cmds.joint(name = "{}_{}".format(self._name, i), position = posAxes )
-			self._joints.append(joint)
+		""" Create chain joints from input joints"""
+		for i, jnt in enumerate(self._inputJoints):
+			name ="{}_joint_{}".format(self._name, i)
+			
+			#get input joint position
+			mvec = mautil.Transform(jnt).translation()
+
+			#create node
+			mdagmod = om.MDagModifier()
+			mobj = mdagmod.createNode("joint")
+			mdagmod.doIt()
+	
+			joint = mautil.Transform(om.MFnDependencyNode(mobj).name())	
+			joint.setName(name)
+			joint.setTranslation(mvec, mautil.Space.WORLD)
+
+			self._joints.append(name)
+
+		for jnt, i in enumerate(self._joints):
+			#BUILD HIERARCHY
+
+
+
+
+
+
+
+
+
+
 
 	def getJoints(self):
 		return self._joints

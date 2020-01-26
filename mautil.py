@@ -15,10 +15,28 @@ class Space(object):
 class Transform(object):
 	def __init__(self, name):
 		self._dag = SelectionList.getDagPath(name)
-		self._transform = om.MFnTransform(self._dag)
+		self._fnTransform = om.MFnTransform(self._dag)
 
 	def translation(self, space = Space.WORLD):
-		return self._transform.translation(space)
+		return self._fnTransform.translation(space)
+
+	def setTranslation(self, vector, space = Space.WORLD):
+		self._fnTransform.setTranslation(vector, space)
+
+	def setName(self, name):
+		self._fnTransform.setName(name)
+
+class Dag(object):
+	def __init__(self, name):
+		self._dag = SelectionList.getDagPath(name)
+		self._fnDagNode = om.MFnDagNode(self._dag)
+
+	def addChild(self, childName):
+		child = SelectionList.getDagPath(childName)
+		self._fnDagNode.addChild(child, 0, False)
+
+
+
 
 
 
