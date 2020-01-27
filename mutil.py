@@ -5,12 +5,25 @@ class SelectionList(object):
 	@staticmethod
 	def getDagPath(name):
 		list_selection = om.MSelectionList()
+		if type(name) == om.MObject:
+			dagnode = om.MFnDagNode(name)
+			name = dagnode.getPath()
+
 		list_selection.add(name)
 		return list_selection.getDagPath(0)
 
 class Space(object):
 	WORLD = om.MSpace.kWorld
 	OBJECT = om.MSpace.kObject
+	TRANSFORM = om.MSpace.kTransform
+
+class RotOrder(object):
+	XYZ = om.MEulerRotation.kXYZ
+	YXZ = om.MEulerRotation.kYXZ
+	ZXY = om.MEulerRotation.kZXY
+	ZYX = om.MEulerRotation.kZYX
+	YZX = om.MEulerRotation.kYZX
+	XZY = om.MEulerRotation.kXZY
 
 class Transform(object):
 	def __init__(self, name):
@@ -23,10 +36,14 @@ class Transform(object):
 	def setTranslation(self, vector, space = Space.WORLD):
 		self._fnTransform.setTranslation(vector, space)
 
-	def setName(self, name):
-		self._fnTransform.setName(name)
+	def eulerRotation(self):
+		return self._fnTransform.rotation(Space.WORLD, False).asVector()
 
-class Dag(object):
+	def setEulerRotation(self, vector):
+		self._fnTransform.setRotation(om.MEulerRotation(vector, RotOrder.XYZ), Space.WORLD)
+
+
+class DagNode(object):
 	def __init__(self, name):
 		self._dag = SelectionList.getDagPath(name)
 		self._fnDagNode = om.MFnDagNode(self._dag)
@@ -34,6 +51,9 @@ class Dag(object):
 	def addChild(self, childName):
 		child = SelectionList.getDagPath(childName)
 		self._fnDagNode.addChild(child, 0, False)
+
+	def setName(self, name):
+		self._fnDagNode.setName(name)
 
 
 

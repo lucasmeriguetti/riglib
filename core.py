@@ -1,8 +1,8 @@
 import maya.cmds as cmds
 import maya.api.OpenMaya as om 
 
-import riglib.mautil as mautil
-reload (mautil)
+import riglib.mutil as mutil
+reload (mutil)
 
 class Chain(object):
 	_count = 0
@@ -19,24 +19,27 @@ class Chain(object):
 		""" Create chain joints from input joints"""
 		for i, jnt in enumerate(self._inputJoints):
 			name ="{}_joint_{}".format(self._name, i)
-			
-			#get input joint position
-			mvec = mautil.Transform(jnt).translation()
 
 			#create node
 			mdagmod = om.MDagModifier()
-			mobj = mdagmod.createNode("joint")
+			moChainJoint = mdagmod.createNode("joint")
 			mdagmod.doIt()
-	
-			joint = mautil.Transform(om.MFnDagNode(mobj).getPath())	
-			joint.setName(name)
-			joint.setTranslation(mvec, mautil.Space.WORLD)
+		
+			#set name
+			dagNodeChainJoint = mutil.DagNode(moChainJoint)
+			dagNodeChainJoint.setName(name)
+
+			#align
+			inputJointTransform = mutil.Transform(jnt)
+			jointTransform = mutil.Transform(moChainJoint)	
+
+			jointTransform.setTranslation(inputJointTransform.translation(), mutil.Space.WORLD)
+			jointTransform.setEulerRotation(inputJointTransform.eulerRotation())
 
 			self._joints.append(name)
 
-		for jnt, i in enumerate(self._joints):
-			#BUILD HIERARCHY
-			pass
+			#################################
+			#BUILD THE HIERARCHY
 
 
 	def getJoints(self):

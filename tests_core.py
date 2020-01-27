@@ -53,6 +53,9 @@ class ChainTests(object):
 	def createChainJointsTest(self):
 		Chain.resetCount()
 		scene = TestScene(5)
+
+		for joint in scene.getJoints():
+			cmds.xform(joint, os = True, ro = (5,5,5))
 		cmds.select(cl = True)
 		chain = Chain(joints = scene.getJoints(), name = "Main")
 
@@ -62,9 +65,20 @@ class ChainTests(object):
 		#test2
 		assert cmds.objectType(chain.getJoints()[0], isType = "joint"), "test2, is not a joint"
 
+		#test3
+		for input, joint in zip(scene.getJoints(), chain.getJoints()):
+			inputTranslation = cmds.xform(input, query = True, ws = True, t = True)
+			inputRotation = cmds.xform(input, query = True, ws = True, ro = True)
+
+			chainTranslation = cmds.xform(joint, query = True, ws = True, t = True)
+			chainRotation = cmds.xform(joint, query = True, ws = True, ro = True)
+
+			assert inputTranslation == chainTranslation, "test3, translation is not the same"
+			assert inputRotation == chainRotation, "test3, rotation is not the same"
+
 		print("No errors in createChainJointsTest()")
 
-		scene.cleanScene()
+		#scene.cleanScene()
 		
 
 
