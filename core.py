@@ -29,18 +29,22 @@ class Chain(object):
 			dagNodeChainJoint = mutil.DagNode(moChainJoint)
 			dagNodeChainJoint.setName(name)
 
+			#build hierarchy
+			if i == 0:
+				parentDagNode = dagNodeChainJoint
+
+			elif i > 0:
+				parentDagNode.addChild(moChainJoint)
+
+			parentDagNode = dagNodeChainJoint
+
 			#align
 			inputJointTransform = mutil.Transform(jnt)
 			jointTransform = mutil.Transform(moChainJoint)	
-
 			jointTransform.setTranslation(inputJointTransform.translation(), mutil.Space.WORLD)
 			jointTransform.setEulerRotation(inputJointTransform.eulerRotation())
 
-			self._joints.append(name)
-
-			#################################
-			#BUILD THE HIERARCHY
-
+			self._joints.append(name)		
 
 	def getJoints(self):
 		return self._joints

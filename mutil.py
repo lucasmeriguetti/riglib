@@ -12,6 +12,14 @@ class SelectionList(object):
 		list_selection.add(name)
 		return list_selection.getDagPath(0)
 
+	@staticmethod
+	def getDependNode(name):
+		list_selection = om.MSelectionList()
+		list_selection.add(name)
+		return list_selection.getDependNode(0)
+
+
+
 class Space(object):
 	WORLD = om.MSpace.kWorld
 	OBJECT = om.MSpace.kObject
@@ -37,10 +45,11 @@ class Transform(object):
 		self._fnTransform.setTranslation(vector, space)
 
 	def eulerRotation(self):
-		return self._fnTransform.rotation(Space.WORLD, False).asVector()
+		return self._fnTransform.rotation(Space.WORLD, True).asEulerRotation().asVector()
 
 	def setEulerRotation(self, vector):
-		self._fnTransform.setRotation(om.MEulerRotation(vector, RotOrder.XYZ), Space.WORLD)
+		eulerAngle = om.MEulerRotation(vector, RotOrder.XYZ)
+		self._fnTransform.setRotation(eulerAngle.asQuaternion(), Space.WORLD)
 
 
 class DagNode(object):
@@ -48,13 +57,15 @@ class DagNode(object):
 		self._dag = SelectionList.getDagPath(name)
 		self._fnDagNode = om.MFnDagNode(self._dag)
 
-	def addChild(self, childName):
-		child = SelectionList.getDagPath(childName)
-		self._fnDagNode.addChild(child, 0, False)
+	def addChild(self, child):
+		mobj = SelectionList.getDependNode(child)
+		self._fnDagNode.addChild(mobj, 0, False)
 
 	def setName(self, name):
 		self._fnDagNode.setName(name)
 
+	def getPath(self):
+		return self._fnDagNode.getPath()
 
 
 

@@ -56,6 +56,7 @@ class ChainTests(object):
 
 		for joint in scene.getJoints():
 			cmds.xform(joint, os = True, ro = (5,5,5))
+			
 		cmds.select(cl = True)
 		chain = Chain(joints = scene.getJoints(), name = "Main")
 
@@ -73,8 +74,11 @@ class ChainTests(object):
 			chainTranslation = cmds.xform(joint, query = True, ws = True, t = True)
 			chainRotation = cmds.xform(joint, query = True, ws = True, ro = True)
 
-			assert inputTranslation == chainTranslation, "test3, translation is not the same"
-			assert inputRotation == chainRotation, "test3, rotation is not the same"
+			for a,b in zip(inputTranslation, chainTranslation):
+				assert round(a, 3) == round(b,3), "test3, translation is not the same"
+			
+			for a,b in zip(inputRotation, chainRotation):
+				assert round(a, 3) == round(b,3), "test3, translation is not the same"
 
 		print("No errors in createChainJointsTest()")
 
