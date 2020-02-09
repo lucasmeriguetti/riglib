@@ -1,12 +1,15 @@
 import maya.cmds as cmds
 import maya.api.OpenMaya as om
 import unittest
+import math
 
 import riglib.mutil
 reload(riglib.mutil)
 from riglib.mutil import *
 def deleteSceneNodes():
-	cmds.delete(cmds.ls(transforms = True, v = True))
+	selection =  cmds.ls(transforms = True, v = True)
+	if len(selection) > 0:
+		cmds.delete(cmds.ls(transforms = True, v = True))
 
 class TestSelectionList(unittest.TestCase):
 
@@ -49,6 +52,36 @@ class TestSpace(unittest.TestCase):
  		result = self.fnTransform.translation(Space.OBJECT)
  		self.assertEqual(result.x, 0)
 
+class TestTransform(unittest.TestCase):
+
+	def setUp(self):
+		deleteSceneNodes()
+		cmds.polyCube(name = "box")
+		self.transform = Transform("box")
+
+	def tearDown(self):
+		deleteSceneNodes()
+		pass
+
+	def test_translation(self):
+		self.transform.setTranslation((10,0,0), Space.WORLD)
+		result = self.transform.translation(Space.WORLD)
+		self.assertEqual(result.x, 10)
+
+	def test_rotation(self):
+		rotation = om.MVector(90,0,0)
+		self.transform.setEulerRotation(rotation)
+		
+		result = self.transform.eulerRotation()
+		self.assertEqual(result.x, 90)
+
+	def test_vectorRadiansToDegrees(self):
+		result = self.transform.vectorRadiansToDegrees((math.pi/2,0,0))
+		self.assertEqual(result.x, 90)
+
+	def test_vectorDegreesToRadians(self):
+		result = self.transform.vectorDegreesToRadians((90,0,0))
+		self.assertEqual(result.x, math.pi/2)
 
 
 if __name__ == "__main__":
@@ -56,4 +89,7 @@ if __name__ == "__main__":
 	unittest.TextTestRunner().run(suite)
 
 	suite = unittest.TestLoader().loadTestsFromTestCase(TestSpace)
+	unittest.TextTestRunner().run(suite)
+
+	suite = unittest.TestLoader().loadTestsFromTestCase(TestTransform)
 	unittest.TextTestRunner().run(suite)

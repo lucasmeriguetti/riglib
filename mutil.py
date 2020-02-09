@@ -43,14 +43,40 @@ class Transform(object):
 		return self._fnTransform.translation(space)
 
 	def setTranslation(self, vector, space = Space.WORLD):
+		if type(vector) != om.MVector:
+			vector = om.MVector(vector)
+
 		self._fnTransform.setTranslation(vector, space)
 
-	def eulerRotation(self):
-		return self._fnTransform.rotation(Space.WORLD, True).asEulerRotation().asVector()
+	def eulerRotation(self, radians = False):
+		rotation =  self._fnTransform.rotation(Space.WORLD, True).asEulerRotation().asVector()
+		
+		if radians == False:
+			rotation = self.vectorRadiansToDegrees(rotation)
 
-	def setEulerRotation(self, vector):
-		eulerAngle = om.MEulerRotation(vector, RotOrder.XYZ)
+		return rotation
+		
+
+	def setEulerRotation(self, vector, radians = False):
+		if radians == False:
+			rotation = self.vectorDegreesToRadians(vector)
+
+		eulerAngle = om.MEulerRotation(rotation, RotOrder.XYZ)
 		self._fnTransform.setRotation(eulerAngle.asQuaternion(), Space.WORLD)
+
+	def vectorRadiansToDegrees(self, vector):
+		vector = om.MVector(vector)
+		vector.x = om.MAngle(vector.x, unit = om.MAngle.kRadians).asDegrees()
+		vector.y = om.MAngle(vector.y, unit = om.MAngle.kRadians).asDegrees()
+		vector.z = om.MAngle(vector.z, unit = om.MAngle.kRadians).asDegrees()
+		return om.MVector(vector)
+
+	def vectorDegreesToRadians(self, vector):
+		vector = om.MVector(vector)
+		vector.x = om.MAngle(vector.x, unit = om.MAngle.kDegrees).asRadians()
+		vector.y = om.MAngle(vector.y, unit = om.MAngle.kDegrees).asRadians()
+		vector.z = om.MAngle(vector.z, unit = om.MAngle.kDegrees).asRadians()
+		return om.MVector(vector)
 
 
 class DagNode(object):
