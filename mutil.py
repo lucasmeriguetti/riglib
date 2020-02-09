@@ -20,11 +20,11 @@ class SelectionList(object):
 		return list_selection.getDependNode(0)
 
 
-
 class Space(object):
 	WORLD = om.MSpace.kWorld
 	OBJECT = om.MSpace.kObject
 	TRANSFORM = om.MSpace.kTransform
+
 
 class RotOrder(object):
 	XYZ = om.MEulerRotation.kXYZ
@@ -33,6 +33,7 @@ class RotOrder(object):
 	ZYX = om.MEulerRotation.kZYX
 	YZX = om.MEulerRotation.kYZX
 	XZY = om.MEulerRotation.kXZY
+
 
 class Transform(object):
 	def __init__(self, name):

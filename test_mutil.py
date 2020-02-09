@@ -83,13 +83,25 @@ class TestTransform(unittest.TestCase):
 		result = self.transform.vectorDegreesToRadians((90,0,0))
 		self.assertEqual(result.x, math.pi/2)
 
+class TestDagNode(unittest.TestCase):
+
+	def setUp(self):
+		deleteSceneNodes()
+		cmds.polyCube(name = "box")
+		self.transform = Transform("box")
+
+	def tearDown(self):
+		deleteSceneNodes()
+		pass
+
 
 if __name__ == "__main__":
-	suite = unittest.TestLoader().loadTestsFromTestCase(TestSelectionList)
-	unittest.TextTestRunner().run(suite)
+	testCases = (TestSelectionList, 
+				TestSpace, 
+				TestTransform,
+				TestDagNode)
 
-	suite = unittest.TestLoader().loadTestsFromTestCase(TestSpace)
-	unittest.TextTestRunner().run(suite)
+	for case in testCases:
+		suite = unittest.TestLoader().loadTestsFromTestCase(case)
+		unittest.TextTestRunner().run(suite)
 
-	suite = unittest.TestLoader().loadTestsFromTestCase(TestTransform)
-	unittest.TextTestRunner().run(suite)
