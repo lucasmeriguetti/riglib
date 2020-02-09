@@ -5,9 +5,10 @@ class SelectionList(object):
 	@staticmethod
 	def getDagPath(name):
 		list_selection = om.MSelectionList()
+		
 		if type(name) == om.MObject:
 			dagnode = om.MFnDagNode(name)
-			name = dagnode.getPath()
+			return dagnode.getPath()
 
 		list_selection.add(name)
 		return list_selection.getDagPath(0)
