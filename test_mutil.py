@@ -85,21 +85,37 @@ class TestTransform(unittest.TestCase):
 
 class TestDagNode(unittest.TestCase):
 
-	def setUp(self):
+	@classmethod
+	def setUpClass(cls):
 		deleteSceneNodes()
-		cmds.polyCube(name = "box")
-		self.transform = Transform("box")
+		cmds.createNode("transform", name = "parent")
+ 		cmds.createNode("transform", name = "child")
+ 		
 
-	def tearDown(self):
+ 	@classmethod	
+	def tearDownClass(cls):
 		deleteSceneNodes()
 		pass
 
+	def setUp(self):
+		self.dag = DagNode("parent")
+
+	def test_addChild(self):
+		self.dag.addChild("child")
+		result = cmds.listRelatives("parent", children = True)[0]
+		self.assertEqual(result, "child")
+
+	def test_setGetName(self):
+		self.dag.setName("NewNameParent")
+		result = self.dag.getName()
+		self.assertEqual(result, "NewNameParent")
 
 if __name__ == "__main__":
+
 	testCases = (TestSelectionList, 
-				TestSpace, 
-				TestTransform,
-				TestDagNode)
+		TestSpace,
+		TestTransform,
+		TestDagNode)
 
 	for case in testCases:
 		suite = unittest.TestLoader().loadTestsFromTestCase(case)

@@ -92,6 +92,10 @@ class DagNode(object):
 	def setName(self, name):
 		self._fnDagNode.setName(name)
 
+	def getName(self):
+		return self._fnDagNode.name()
+
+
 	def getPath(self):
 		return self._fnDagNode.getPath()
 
