@@ -8,12 +8,14 @@ class Chain(object):
 	_count = 0
 	
 	def __init__(self, joints = [], name = "DefaultChain"):
-		Chain._count += 1
 		self._name = "{}_{}".format(name, Chain._count)
 		self._inputJoints = joints
 		self._joints = []
 
 		self.createChainJoints()
+
+		Chain._count += 1
+		
 
 	def createChainJoints(self):
 		""" Create chain joints from input joints"""

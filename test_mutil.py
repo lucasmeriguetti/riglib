@@ -6,6 +6,7 @@ import math
 import riglib.mutil
 reload(riglib.mutil)
 from riglib.mutil import *
+
 def deleteSceneNodes():
 	selection =  cmds.ls(transforms = True, v = True)
 	if len(selection) > 0:
@@ -109,6 +110,10 @@ class TestDagNode(unittest.TestCase):
 		self.dag.setName("NewNameParent")
 		result = self.dag.getName()
 		self.assertEqual(result, "NewNameParent")
+
+	def test_getPath(self):
+		dag = self.dag.getPath()
+		self.assertEqual(type(dag), om.MDagPath)
 
 if __name__ == "__main__":
 
