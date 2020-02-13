@@ -35,6 +35,10 @@ class TestChain(unittest.TestCase):
 		self.chainName = "newChain"
 	 	self.chain = Chain(self.joints, name = self.chainName)
 
+	# def tearDown(self):
+	# 	deleteSceneNodes()
+	# 	Chain.resetCount()
+
 	def test_getJoints(self):
 		chainJoints = self.chain.getJoints()
 		self.assertEqual(len(chainJoints), len(self.joints))
@@ -76,6 +80,12 @@ class TestChain(unittest.TestCase):
 			jntRotation = cmds.xform(jnt, query = True, ws = True, ro = True)
 			for a,b in zip(chainRotation, jntRotation):
 				self.assertEqual(round(a,3), round(b,3))
+
+	def test_constraintInputJoints(self):
+		self.assertNotEqual(len(self.chain.getParentConstraints()), 0)
+		self.assertNotEqual(len(self.chain.getScaleConstraints()), 0)
+		self.assertEqual(cmds.objectType(self.chain.getParentConstraints()[0]), "parentConstraint")
+		self.assertEqual(cmds.objectType(self.chain.getScaleConstraints()[0]), "scaleConstraint")
 
 
 if __name__ == "__main__":

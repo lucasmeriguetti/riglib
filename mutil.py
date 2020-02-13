@@ -82,10 +82,18 @@ class Transform(object):
 
 class DagNode(object):
 	def __init__(self, name):
-		self._dag = SelectionList.getDagPath(name)
+		if type(name) == type(self):
+			self = name
+
+		else:
+			self._dag = SelectionList.getDagPath(name)
+
 		self._fnDagNode = om.MFnDagNode(self._dag)
 
 	def addChild(self, child):
+		if type(child) == type(self):
+			child = child.getName()
+		
 		mobj = SelectionList.getDependNode(child)
 		self._fnDagNode.addChild(mobj, 0, False)
 
@@ -99,7 +107,11 @@ class DagNode(object):
 	def getPath(self):
 		return self._fnDagNode.getPath()
 
+	@staticmethod
+	def create(dagtype = "transform", name = "Default"):
+		mdagmod = om.MDagModifier()
+		mobj = mdagmod.createNode(dagtype)
+		mdagmod.doIt()
 
-
-
+		return DagNode(mobj)
 

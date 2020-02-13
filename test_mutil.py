@@ -115,6 +115,12 @@ class TestDagNode(unittest.TestCase):
 		dag = self.dag.getPath()
 		self.assertEqual(type(dag), om.MDagPath)
 
+	def test_create(self):
+		dag = DagNode.create("transform", False)
+		self.assertEqual(type(dag), DagNode)
+
+
+
 if __name__ == "__main__":
 
 	testCases = (TestSelectionList, 
