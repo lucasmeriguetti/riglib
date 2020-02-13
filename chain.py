@@ -29,8 +29,7 @@ class Chain(object):
 			name ="{}_joint_{}".format(self._name, i)
 
 			#set name
-			dagNodeChainJoint = mutil.DagNode.create("joint")
-			dagNodeChainJoint.setName(name)
+			dagNodeChainJoint = mutil.DagNode.create("joint", name)
 
 			#hierarchy
 			if i > 0:

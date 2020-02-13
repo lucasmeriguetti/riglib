@@ -93,8 +93,9 @@ class DagNode(object):
 	def addChild(self, child):
 		if type(child) == type(self):
 			child = child.getName()
-		
+
 		mobj = SelectionList.getDependNode(child)
+
 		self._fnDagNode.addChild(mobj, 0, False)
 
 	def setName(self, name):
@@ -108,10 +109,12 @@ class DagNode(object):
 		return self._fnDagNode.getPath()
 
 	@staticmethod
-	def create(dagtype = "transform", name = "Default"):
+	def create(dagtype = "transform", name = "default"):
 		mdagmod = om.MDagModifier()
 		mobj = mdagmod.createNode(dagtype)
 		mdagmod.doIt()
 
-		return DagNode(mobj)
+		dagnode = DagNode(mobj)
+		dagnode.setName(name)
+		return dagnode
 
