@@ -87,6 +87,18 @@ class TestChain(unittest.TestCase):
 		self.assertEqual(cmds.objectType(self.chain.getParentConstraints()[0]), "parentConstraint")
 		self.assertEqual(cmds.objectType(self.chain.getScaleConstraints()[0]), "scaleConstraint")
 
+	def test_createChainGroup(self):
+		chainGrp = self.chain.getChainGroup()
+		chainOffsetGrp = self.chain.getChainGroup(True)
+		self.assertNotEqual(chainGrp, None)
+		self.assertNotEqual(chainOffsetGrp, None)
+
+		result = cmds.listRelatives(chainGrp.getName(), children = True)[0]
+		self.assertEqual(result, chainOffsetGrp.getName())
+
+		result = cmds.listRelatives(chainOffsetGrp.getName(), children = True)[0]
+		self.assertEqual(result, self.chain.getJoints()[0])
+
 
 if __name__ == "__main__":
 	testCases = [TestChain]

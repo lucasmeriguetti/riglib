@@ -13,15 +13,30 @@ class Chain(object):
 		self._joints = []
 		self._parentConstraint = []
 		self._scaleConstraint = []
+		self._chainGroup = None
+		self._chainOffsetGroup = None
 
 		self.createChainJoints()
-
 		self.constraintInputJoints()
+		self.createChainGroup()
 
 		Chain._count += 1
 		
 	def createChainGroup(self):
-		Dag
+		self._chainGroup = mutil.DagNode.create("transform", 
+			name = "{}_Grp".format(self._name))
+
+		self._chainOffsetGroup = mutil.DagNode.create("transform", 
+			name = "{}_Offset_Grp".format(self._name))
+
+		self._chainGroup.addChild(self._chainOffsetGroup)
+		self._chainOffsetGroup.addChild(self._joints[0])
+
+	def getChainGroup(self, offset = False):
+		if offset:
+			return self._chainOffsetGroup
+
+		return self._chainGroup
 
 	def createChainJoints(self):
 		""" Create chain joints from input joints"""
