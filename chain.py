@@ -21,7 +21,19 @@ class Chain(object):
 		self.createChainGroup()
 
 		Chain._count += 1
-		
+	def getWeightAlias(self, constraintName = None):
+		if cmds.objectType(constraintName) == "parentConstraint":
+			return cmds.parentConstraint(constraintName, 
+				query = True, weightAliasList = True)
+
+		if cmds.objectType(constraintName) == "scaleConstraint":
+			return cmds.scaleConstraint(constraintName, 
+				query = True, weightAliasList = True)
+
+	def addAttrChainGroup(self):
+		NEED TO ADD ATTRIBUTE TO CHAIN GROUP
+		CONNECT ATTRIBUTE TO WIEGHT LIST
+		pass
 	def createChainGroup(self):
 		self._chainGroup = mutil.DagNode.create("transform", 
 			name = "{}_Grp".format(self._name))
@@ -67,10 +79,15 @@ class Chain(object):
 		for i, j in zip(self._inputJoints, self._joints):
 			self._scaleConstraint.append(cmds.scaleConstraint(j, i, name = "{}_scaleConstraint".format(j))[0])
 
-	def getScaleConstraints(self):
+	def getScaleConstraints(self, index = None):
+		if index != None:
+			return self._scaleConstraint[index]
+
 		return self._scaleConstraint
 
-	def getParentConstraints(self):
+	def getParentConstraints(self, index = None):
+		if index != None:
+			return self._parentConstraint[index]
 		return self._parentConstraint
 
 	def getJoints(self):

@@ -35,8 +35,8 @@ class TestChain(unittest.TestCase):
 		self.chainName = "newChain"
 	 	self.chain = Chain(self.joints, name = self.chainName)
 
-	# def tearDown(self):
-	# 	deleteSceneNodes()
+	#def tearDown(self):
+	#	deleteSceneNodes()
 	# 	Chain.resetCount()
 
 	def test_getJoints(self):
@@ -80,6 +80,20 @@ class TestChain(unittest.TestCase):
 			jntRotation = cmds.xform(jnt, query = True, ws = True, ro = True)
 			for a,b in zip(chainRotation, jntRotation):
 				self.assertEqual(round(a,3), round(b,3))
+	
+	def test_getConstraints(self):
+		lst = []
+		result = self.chain.getParentConstraints()
+		self.assertNotEqual(result,lst)
+
+		result = self.chain.getScaleConstraints()
+		self.assertNotEqual(result,lst)
+
+		result = self.chain.getParentConstraints(index = 0)
+		self.assertEqual(cmds.objectType(result), "parentConstraint")
+
+		result = self.chain.getScaleConstraints(0)
+		self.assertEqual(cmds.objectType(result), "scaleConstraint")
 
 	def test_constraintInputJoints(self):
 		self.assertNotEqual(len(self.chain.getParentConstraints()), 0)
@@ -99,6 +113,11 @@ class TestChain(unittest.TestCase):
 		result = cmds.listRelatives(chainOffsetGrp.getName(), children = True)[0]
 		self.assertEqual(result, self.chain.getJoints()[0])
 
+	def test_getWeightAlias(self):
+		constraintName =  self.chain.getParentConstraints(0)
+		weights = self.chain.getWeightAlias(constraintName)
+		self.assertNotEqual(weights, [])
+		
 
 if __name__ == "__main__":
 	testCases = [TestChain]
