@@ -35,9 +35,9 @@ class TestChain(unittest.TestCase):
 		self.chainName = "newChain"
 	 	self.chain = Chain(self.joints, name = self.chainName)
 
-	#def tearDown(self):
-	#	deleteSceneNodes()
-	# 	Chain.resetCount()
+	def tearDown(self):
+		deleteSceneNodes()
+	 	Chain.resetCount()
 
 	def test_getJoints(self):
 		chainJoints = self.chain.getJoints()
@@ -127,3 +127,4 @@ if __name__ == "__main__":
 		unittest.TextTestRunner().run(suite)
 
 
+		

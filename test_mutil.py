@@ -116,9 +116,15 @@ class TestDagNode(unittest.TestCase):
 		self.assertEqual(type(dag), om.MDagPath)
 
 	def test_create(self):
-		dag = DagNode.create("transform", False)
+		dag = DagNode.create("transform")
 		self.assertEqual(type(dag), DagNode)
 
+	def test_addAttr(self):
+		attrName = "newAttr1"
+		self.dag.addAttr(attrName, "float", keyable = True)
+
+		result = cmds.listAttr("parent", string = attrName)[0]
+		self.assertEqual(result, attrName)
 
 
 if __name__ == "__main__":

@@ -30,10 +30,6 @@ class Chain(object):
 			return cmds.scaleConstraint(constraintName, 
 				query = True, weightAliasList = True)
 
-	def addAttrChainGroup(self):
-		NEED TO ADD ATTRIBUTE TO CHAIN GROUP
-		CONNECT ATTRIBUTE TO WIEGHT LIST
-		pass
 	def createChainGroup(self):
 		self._chainGroup = mutil.DagNode.create("transform", 
 			name = "{}_Grp".format(self._name))

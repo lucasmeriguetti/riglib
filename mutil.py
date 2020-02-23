@@ -79,6 +79,26 @@ class Transform(object):
 		vector.z = om.MAngle(vector.z, unit = om.MAngle.kDegrees).asRadians()
 		return om.MVector(vector)
 
+class NumData(object):
+	data = om.MFnNumericData
+	FLOAT = data.kFloat 
+	DOUBLE = data.kDouble
+	INT = data.kInt
+	BOOL = data.kBoolean
+
+	@classmethod
+	def fromString(cls, numDataString):
+		if "float":
+			return NumData.FLOAT
+
+		if "double":
+			return NumData.DOUBLE
+
+		if "int":
+			return NumData.INT 
+
+		if "bool":
+			return NumData.BOOL
 
 class DagNode(object):
 	def __init__(self, name):
@@ -87,15 +107,16 @@ class DagNode(object):
 
 		else:
 			self._dag = SelectionList.getDagPath(name)
+			self._mobj = SelectionList.getDependNode(name)
 
 		self._fnDagNode = om.MFnDagNode(self._dag)
+		self._fnNumAttr = om.MFnNumericAttribute()
 
 	def addChild(self, child):
 		if type(child) == type(self):
 			child = child.getName()
 
 		mobj = SelectionList.getDependNode(child)
-
 		self._fnDagNode.addChild(mobj, 0, False)
 
 	def setName(self, name):
@@ -107,6 +128,23 @@ class DagNode(object):
 	def getPath(self):
 		return self._fnDagNode.getPath()
 
+	def addAttr(self,longName = None, shortName = None, 
+		type = "float", maxValue = 1.0,	minValue = 0.0,
+		defaultValue = 0.0,	keyable = True	):
+
+		if shortName == None:
+			shortName = longName
+
+		attr = self._fnNumAttr.create(longName, shortName, NumData.fromString(type))
+		
+		if keyable:
+			self._fnNumAttr.keyable = True
+
+		self._fnNumAttr.setMax(maxValue)
+		self._fnNumAttr.setMin(minValue)
+		self._fnNumAttr.default = defaultValue
+		self._fnDagNode.addAttribute(attr)
+
 	@staticmethod
 	def create(dagtype = "transform", name = "default"):
 		mdagmod = om.MDagModifier()
@@ -116,4 +154,10 @@ class DagNode(object):
 		dagnode = DagNode(mobj)
 		dagnode.setName(name)
 		return dagnode
+
+
+
+
+
+
 
