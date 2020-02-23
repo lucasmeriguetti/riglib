@@ -11,7 +11,8 @@ reload (mutil)
 class Rigger(Chain):
 
 	def __init__(self, chain, name = "DefaultRigger"):
-		super(Rigger, self).__init__(joints = chain.getJoints(), name = name)
+		self._chain = chain 
+		super(Rigger, self).__init__(joints = self._chain.getJoints(), name = name)
 
-
-		
+	def addWeightAttrToChain(self):
+		pass 

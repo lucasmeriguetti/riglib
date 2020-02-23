@@ -7,12 +7,12 @@ import riglib.mutil
 reload(riglib.mutil)
 from riglib.mutil import *
 
+import riglib.tests_functions
+reload (riglib.tests_functions)
+from riglib.tests_functions import deleteSceneNodes, createSceneJoints
+
 print ("\n TEST MUTIL")
 
-def deleteSceneNodes():
-	selection =  cmds.ls(transforms = True, v = True)
-	if len(selection) > 0:
-		cmds.delete(cmds.ls(transforms = True, v = True))
 
 class TestSelectionList(unittest.TestCase):
 

@@ -9,3 +9,4 @@ test_mutil.runTests()
 import riglib.test_rigger as test_rigger
 reload (test_rigger)
 test_rigger.runTests()
+

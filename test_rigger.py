@@ -8,6 +8,10 @@ from riglib.rigger import Rigger
 
 print ("\n TEST RIGGER")
 
+import riglib.tests_functions
+reload (riglib.tests_functions)
+from riglib.tests_functions import deleteSceneNodes, createSceneJoints
+	
 class TestRigger(unittest.TestCase):
 	pass 
 
