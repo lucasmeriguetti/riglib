@@ -11,7 +11,7 @@ import riglib.tests_functions
 reload (riglib.tests_functions)
 from riglib.tests_functions import deleteSceneNodes, createSceneJoints
 
-print ("\n TEST MUTIL")
+
 
 
 class TestSelectionList(unittest.TestCase):
@@ -130,6 +130,7 @@ class TestDagNode(unittest.TestCase):
 
 
 def runTests():
+	print ("\n TEST MUTIL")
 	testCases = [TestSelectionList, 
 		TestSpace,
 		TestTransform,
@@ -140,6 +141,7 @@ def runTests():
 		unittest.TextTestRunner().run(suite)
 
 if __name__ == "__main__":
+
 	runTests()
 
 

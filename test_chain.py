@@ -10,7 +10,6 @@ import riglib.tests_functions
 reload (riglib.tests_functions)
 from riglib.tests_functions import deleteSceneNodes, createSceneJoints
 
-print ("\n TEST CHAIN")
 
 
 class TestChain(unittest.TestCase):
@@ -108,6 +107,7 @@ class TestChain(unittest.TestCase):
 
 
 def runTests():
+	print ("\n TEST CHAIN")
 	testCases = [TestChain]
 
 	for case in testCases:
