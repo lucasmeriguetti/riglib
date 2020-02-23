@@ -7,6 +7,8 @@ import riglib.mutil
 reload(riglib.mutil)
 from riglib.mutil import *
 
+print ("\n TEST MUTIL")
+
 def deleteSceneNodes():
 	selection =  cmds.ls(transforms = True, v = True)
 	if len(selection) > 0:
@@ -96,7 +98,7 @@ class TestDagNode(unittest.TestCase):
  	@classmethod	
 	def tearDownClass(cls):
 		deleteSceneNodes()
-		pass
+		
 
 	def setUp(self):
 		self.dag = DagNode("parent")
@@ -127,14 +129,18 @@ class TestDagNode(unittest.TestCase):
 		self.assertEqual(result, attrName)
 
 
-if __name__ == "__main__":
-
-	testCases = (TestSelectionList, 
+def runTests():
+	testCases = [TestSelectionList, 
 		TestSpace,
 		TestTransform,
-		TestDagNode)
+		TestDagNode]
 
 	for case in testCases:
 		suite = unittest.TestLoader().loadTestsFromTestCase(case)
 		unittest.TextTestRunner().run(suite)
+
+if __name__ == "__main__":
+	runTests()
+
+
 

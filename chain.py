@@ -21,6 +21,7 @@ class Chain(object):
 		self.createChainGroup()
 
 		Chain._count += 1
+		
 	def getWeightAlias(self, constraintName = None):
 		if cmds.objectType(constraintName) == "parentConstraint":
 			return cmds.parentConstraint(constraintName, 

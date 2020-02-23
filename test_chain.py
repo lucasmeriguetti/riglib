@@ -6,6 +6,7 @@ import riglib.chain
 reload (riglib.chain)
 from riglib.chain import Chain 
 
+print ("\n TEST CHAIN")
 
 def deleteSceneNodes():
 	selection =  cmds.ls(transforms = True, v = True)
@@ -27,6 +28,7 @@ def createSceneJoints():
 
 
 class TestChain(unittest.TestCase):
+
 
 	def setUp(self):
 		deleteSceneNodes()
@@ -117,9 +119,9 @@ class TestChain(unittest.TestCase):
 		constraintName =  self.chain.getParentConstraints(0)
 		weights = self.chain.getWeightAlias(constraintName)
 		self.assertNotEqual(weights, [])
-		
 
-if __name__ == "__main__":
+
+def runTests():
 	testCases = [TestChain]
 
 	for case in testCases:
@@ -127,4 +129,6 @@ if __name__ == "__main__":
 		unittest.TextTestRunner().run(suite)
 
 
-		
+if __name__ == "__main__":
+	runTests()
+
