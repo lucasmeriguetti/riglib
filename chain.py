@@ -16,12 +16,15 @@ class Chain(object):
 		self._chainGroup = None
 		self._chainOffsetGroup = None
 
-		self.createChainJoints()
+		self.createJoints()
 		self.constraintInputJoints()
-		self.createChainGroup()
+		self.createContainer()
 
 		Chain._count += 1
-		
+
+	def getName(self):
+		return self._name
+
 	def getWeightAlias(self, constraintName = None):
 		if cmds.objectType(constraintName) == "parentConstraint":
 			return cmds.parentConstraint(constraintName, 
@@ -31,7 +34,7 @@ class Chain(object):
 			return cmds.scaleConstraint(constraintName, 
 				query = True, weightAliasList = True)
 
-	def createChainGroup(self):
+	def createContainer(self):
 		self._chainGroup = mutil.DagNode.create("transform", 
 			name = "{}_Grp".format(self._name))
 
@@ -41,13 +44,13 @@ class Chain(object):
 		self._chainGroup.addChild(self._chainOffsetGroup)
 		self._chainOffsetGroup.addChild(self._joints[0])
 
-	def getChainGroup(self, offset = False):
+	def getContainer(self, offset = False):
 		if offset:
 			return self._chainOffsetGroup
 
 		return self._chainGroup
 
-	def createChainJoints(self):
+	def createJoints(self):
 		""" Create chain joints from input joints"""
 		for i, jnt in enumerate(self._inputJoints):
 			name ="{}_joint_{}".format(self._name, i)
@@ -91,7 +94,7 @@ class Chain(object):
 		return self._joints
 
 	@classmethod
-	def getChainCount(cls):
+	def getCount(cls):
 		return Chain._count
 
 	@classmethod

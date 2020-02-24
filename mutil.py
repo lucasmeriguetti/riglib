@@ -145,6 +145,15 @@ class DagNode(object):
 		self._fnNumAttr.default = defaultValue
 		self._fnDagNode.addAttribute(attr)
 
+	def connectPlug(self, source, destination):
+		sourcePlug = self.findPlug(source)
+		mdgmod = om.MDGModifier()
+		mdgmod.connect(sourcePlug, destination)
+		mdgmod.doIt()
+
+	def findPlug(self, plugName):
+		return self._fnDagNode.findPlug(plugName, True)
+
 	@staticmethod
 	def create(dagtype = "transform", name = "default"):
 		mdagmod = om.MDagModifier()

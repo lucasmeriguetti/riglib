@@ -32,15 +32,15 @@ class TestChain(unittest.TestCase):
 		self.assertNotEqual(len(chainJoints), 0)
 
 	def test_chainCount(self):
-		self.assertEqual(Chain.getChainCount(), 1)
+		self.assertEqual(Chain.getCount(), 1)
 
 		chain2 = Chain(self.joints, name = self.chainName)
-		self.assertEqual(Chain.getChainCount(), 2)
+		self.assertEqual(Chain.getCount(), 2)
 
 		Chain.resetCount()
-		self.assertEqual(Chain.getChainCount(), 0)
+		self.assertEqual(Chain.getCount(), 0)
 
-	def test_createChainJoints(self):
+	def test_createJoints(self):
 		deleteSceneNodes()
 		Chain.resetCount()
 		self.joints = createSceneJoints()
@@ -88,9 +88,9 @@ class TestChain(unittest.TestCase):
 		self.assertEqual(cmds.objectType(self.chain.getParentConstraints()[0]), "parentConstraint")
 		self.assertEqual(cmds.objectType(self.chain.getScaleConstraints()[0]), "scaleConstraint")
 
-	def test_createChainGroup(self):
-		chainGrp = self.chain.getChainGroup()
-		chainOffsetGrp = self.chain.getChainGroup(True)
+	def test_getContainer(self):
+		chainGrp = self.chain.getContainer()
+		chainOffsetGrp = self.chain.getContainer(True)
 		self.assertNotEqual(chainGrp, None)
 		self.assertNotEqual(chainOffsetGrp, None)
 

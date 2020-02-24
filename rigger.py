@@ -12,7 +12,19 @@ class Rigger(Chain):
 
 	def __init__(self, chain, name = "DefaultRigger"):
 		self._chain = chain 
-		super(Rigger, self).__init__(joints = self._chain.getJoints(), name = name)
+		self._name  = name
+
+		super(Rigger, self).__init__(joints = self._chain.getJoints(), name = self._name)
+		self.addWeightAttrToChain()
+		self.connectWeightAttrToChainConstraint()
+
+	def getChain(self):
+		return self._chain
 
 	def addWeightAttrToChain(self):
-		pass 
+		chainContainer = self._chain.getContainer()
+		chainContainer.addAttr(self._name, self._name)
+
+	def connectWeightAttrToChainConstraint(self):
+		pass
+
