@@ -128,6 +128,9 @@ class DagNode(object):
 	def getPath(self):
 		return self._fnDagNode.getPath()
 
+	def getMObject(self):
+		return self._fnDagNode.object()
+
 	def addAttr(self,longName = None, shortName = None, 
 		type = "float", maxValue = 1.0,	minValue = 0.0,
 		defaultValue = 0.0,	keyable = True	):
@@ -145,10 +148,18 @@ class DagNode(object):
 		self._fnNumAttr.default = defaultValue
 		self._fnDagNode.addAttribute(attr)
 
-	def connectPlug(self, source, destination):
-		sourcePlug = self.findPlug(source)
+	def connect(self, sourceAttr, destObject, destAttr):
+
+		if isinstance(destObject, DagNode):
+			destObject = destObject.getMObject()
+
+		mfndep = om.MFnDependencyNode(destObject)
+		destAttr = mfndep.attribute(destAttr)
+
+		sourceAttr = self._fnDagNode.attribute(sourceAttr)
+
 		mdgmod = om.MDGModifier()
-		mdgmod.connect(sourcePlug, destination)
+		mdgmod.connect(self.getMObject(), sourceAttr, destObject, destAttr)
 		mdgmod.doIt()
 
 	def findPlug(self, plugName):

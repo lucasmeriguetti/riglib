@@ -98,7 +98,6 @@ class TestDagNode(unittest.TestCase):
  	@classmethod	
 	def tearDownClass(cls):
 		deleteSceneNodes()
-		
 
 	def setUp(self):
 		self.dag = DagNode("parent")
@@ -127,6 +126,16 @@ class TestDagNode(unittest.TestCase):
 
 		result = cmds.listAttr("parent", string = attrName)[0]
 		self.assertEqual(result, attrName)
+
+	def test_connect(self):
+		t1 = DagNode.create("transform", name = "node1")
+		t2 = DagNode.create("transform", name = "node2")
+		t1.connect("tx", t2, "tx")
+
+	def test_findPlug(self):
+		plug = self.dag.findPlug("tx")
+		self.assertEqual(type(plug), om.MPlug)
+
 
 
 def runTests():
