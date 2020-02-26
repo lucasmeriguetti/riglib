@@ -112,7 +112,7 @@ def runTests():
 
 	for case in testCases:
 		suite = unittest.TestLoader().loadTestsFromTestCase(case)
-		unittest.TextTestRunner().run(suite)
+		unittest.TextTestRunner(verbosity=2).run(suite)
 
 
 if __name__ == "__main__":
