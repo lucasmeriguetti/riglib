@@ -52,7 +52,7 @@ class TestChain(unittest.TestCase):
 	 	self.chain = Chain(self.joints, name = self.chainName)
 
 		for index, chainJnt in enumerate(self.chain.getJoints()):
-			name = "{}_{}".format(self.chainName, Chain._count -1 )
+			name = self.chain.getName()
 			result ="{}_joint_{}".format(name, index)
 			self.assertEqual(chainJnt, result)
 

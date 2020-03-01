@@ -131,6 +131,9 @@ class TestDagNode(unittest.TestCase):
 		t1 = DagNode.create("transform", name = "node1")
 		t2 = DagNode.create("transform", name = "node2")
 		t1.connect("tx", t2, "tx")
+		result = cmds.listConnections("{}.tx".format(t2.getName()), d = False, s = True )[0]
+
+		self.assertEqual(result, t1.getName())
 
 	def test_findPlug(self):
 		plug = self.dag.findPlug("tx")

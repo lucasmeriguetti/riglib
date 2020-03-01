@@ -153,6 +153,9 @@ class DagNode(object):
 		if isinstance(destObject, DagNode):
 			destObject = destObject.getMObject()
 
+		if isinstance(destObject, basestring):
+		 	destObject = SelectionList.getDependNode(destObject)
+
 		mfndep = om.MFnDependencyNode(destObject)
 		destAttr = mfndep.attribute(destAttr)
 

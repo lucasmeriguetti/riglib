@@ -8,7 +8,7 @@ class Chain(object):
 	_count = 0
 	
 	def __init__(self, joints = [], name = "DefaultChain"):
-		self._name = "{}_{}".format(name, Chain._count)
+		self._name = "i{}_{}".format(self.__class__._count, name)
 		self._inputJoints = joints
 		self._joints = []
 		self._parentConstraint = []
@@ -20,7 +20,7 @@ class Chain(object):
 		self.constraintInputJoints()
 		self.createContainer()
 
-		Chain._count += 1
+		self.__class__._count += 1
 
 	def getName(self):
 		return self._name
@@ -95,12 +95,11 @@ class Chain(object):
 
 	@classmethod
 	def getCount(cls):
-		return Chain._count
+		return cls._count
 
 	@classmethod
 	def resetCount(cls):
-		Chain._count = 0
-		return True
+		cls._count = 0
 
 
 

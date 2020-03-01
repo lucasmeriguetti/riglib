@@ -27,22 +27,26 @@ class TestRigger(unittest.TestCase):
 		deleteSceneNodes()
 	 	Chain.resetCount()
 	 	pass
-	 	
-	def test_init(self):
-		rigger = Rigger(self.chain, name = "NewRig")
-		rigGroup = rigger.getContainer().getName()
-		result = "{}_Grp".format(rigger.getName())
-		self.assertEqual(result, rigGroup)
-
-		rigger2 = Rigger(self.chain, name = "NewRig2")
-
-		del rigger, rigger2 
 
 	def test_addWeightAttrToChain(self):
 		rigger = Rigger(self.chain, name = "NewRig")
 		container = rigger.getChain().getContainer().getName()
 		result = cmds.listAttr(container, string = rigger.getName())[0]
 		self.assertEqual(result, rigger.getName())
+
+	def test_connectWeightAttrToConstraints(self):
+		rigger = Rigger(self.chain, name = "NewRig")
+		chain = rigger.getChain()
+		containerAttr =chain.getContainer().findPlug(rigger.getName())
+		containerAttrConnections = cmds.listConnections(containerAttr)
+
+		pConst = chain.getParentConstraints()
+		sConst = chain.getParentConstraints()
+
+		result  = len(pConst) + len(sConst)
+
+		self.assertEqual(len(containerAttrConnections), result)
+
 
 def runTests():
 	print ("\n TEST RIGGER")
