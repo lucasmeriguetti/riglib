@@ -2,8 +2,12 @@ import maya.cmds as cmds
 import maya.api.OpenMaya as om 
 
 class SelectionList(object):
+	""" MSelectionList interface. """
 	@staticmethod
 	def getDagPath(name):
+		""" Returns a MDagPath object. 
+			Parameters: 
+				- name (string)"""
 		list_selection = om.MSelectionList()
 		
 		if type(name) == om.MObject:
@@ -15,18 +19,24 @@ class SelectionList(object):
 
 	@staticmethod
 	def getDependNode(name):
+		""" Returns a MObject object. 
+			Parameters: 
+			- name (string)"""
 		list_selection = om.MSelectionList()
 		list_selection.add(name)
 		return list_selection.getDependNode(0)
 
 
 class Space(object):
+	"""MSpace constants """
 	WORLD = om.MSpace.kWorld
 	OBJECT = om.MSpace.kObject
 	TRANSFORM = om.MSpace.kTransform
 
 
 class RotOrder(object):
+	""" MEulerRotation Rotation Order constants. """
+
 	XYZ = om.MEulerRotation.kXYZ
 	YXZ = om.MEulerRotation.kYXZ
 	ZXY = om.MEulerRotation.kZXY
@@ -36,20 +46,47 @@ class RotOrder(object):
 
 
 class Transform(object):
+	""" Deal with transformations. 
+		
+		Parameters:
+			name(string)"""
+
 	def __init__(self, name):
 		self._dag = SelectionList.getDagPath(name)
 		self._fnTransform = om.MFnTransform(self._dag)
 
-	def translation(self, space = Space.WORLD):
+	def getTranslation(self, space = Space.WORLD):
+		""" Returns translation. 
+			
+			Parameters:
+				space (Space.CONSTANT) 
+					Default Space.WORLD: 
+					Space.LOCAL, Space.WORLD, SpaceTRANSFORM"""
+
 		return self._fnTransform.translation(space)
 
 	def setTranslation(self, vector, space = Space.WORLD):
-		if type(vector) != om.MVector:
-			vector = om.MVector(vector)
+		""" Translate transform. 
+			
+			Parameters:
+				vector (Tuple(x,y,z) or MVector)
+				space (Space.CONSTANT) 
+					Default Space.WORLD: 
+					Space.LOCAL, Space.WORLD, SpaceTRANSFORM"""
+
+		vector = om.MVector(vector)
 
 		self._fnTransform.setTranslation(vector, space)
 
-	def eulerRotation(self, radians = False):
+	def getRotation(self, radians = False):
+		""" Returns transform MVector rotation.  
+			Set radians = True to get vector in randians. 
+			
+			Parameters:
+				vector (Tuple(x,y,z) or MVector)
+				space (Space.CONSTANT) 
+					Default Space.WORLD: 
+					Space.LOCAL, Space.WORLD, SpaceTRANSFORM"""
 		rotation =  self._fnTransform.rotation(Space.WORLD, True).asEulerRotation().asVector()
 		
 		if radians == False:
@@ -58,7 +95,16 @@ class Transform(object):
 		return rotation
 		
 
-	def setEulerRotation(self, vector, radians = False):
+	def setRotation(self, vector, radians = False):
+		""" Set rotation. 
+			Set radians = True to set it in randians. 
+			
+			Parameters:
+				vector (Tuple(x,y,z) or MVector)
+				space (Space.CONSTANT) 
+					Default Space.WORLD: 
+					Space.LOCAL, Space.WORLD, SpaceTRANSFORM"""
+
 		if radians == False:
 			rotation = self.vectorDegreesToRadians(vector)
 
@@ -66,6 +112,10 @@ class Transform(object):
 		self._fnTransform.setRotation(eulerAngle.asQuaternion(), Space.WORLD)
 
 	def vectorRadiansToDegrees(self, vector):
+		""" Convert radian angles to degrees. Returns MVector. 
+			Parameters:
+				vector (Tuple(x,y,z) or MVector)"""
+
 		vector = om.MVector(vector)
 		vector.x = om.MAngle(vector.x, unit = om.MAngle.kRadians).asDegrees()
 		vector.y = om.MAngle(vector.y, unit = om.MAngle.kRadians).asDegrees()
@@ -73,6 +123,10 @@ class Transform(object):
 		return om.MVector(vector)
 
 	def vectorDegreesToRadians(self, vector):
+		""" Convert degree angles to radians. Returns MVector. 
+			Parameters:
+				vector (Tuple(x,y,z) or MVector)"""
+
 		vector = om.MVector(vector)
 		vector.x = om.MAngle(vector.x, unit = om.MAngle.kDegrees).asRadians()
 		vector.y = om.MAngle(vector.y, unit = om.MAngle.kDegrees).asRadians()
@@ -80,6 +134,7 @@ class Transform(object):
 		return om.MVector(vector)
 
 class NumData(object):
+	"""Interfaces with MFnNumericData."""
 	data = om.MFnNumericData
 	FLOAT = data.kFloat 
 	DOUBLE = data.kDouble
@@ -88,6 +143,11 @@ class NumData(object):
 
 	@classmethod
 	def fromString(cls, numDataString):
+		""" Returns MFnNumericData from strings. 
+			Parameters:
+				numDataString (string): 
+					float, double, int, bool"""
+
 		if "float":
 			return NumData.FLOAT
 
@@ -102,6 +162,7 @@ class NumData(object):
 
 class DagNode(object):
 	def __init__(self, name):
+	"""Deals with dag nodes."""
 		if type(name) == type(self):
 			self = name
 

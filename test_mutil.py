@@ -64,16 +64,16 @@ class TestTransform(unittest.TestCase):
 		deleteSceneNodes()
 		pass
 
-	def test_translation(self):
+	def test_getTranslation(self):
 		self.transform.setTranslation((10,0,0), Space.WORLD)
-		result = self.transform.translation(Space.WORLD)
+		result = self.transform.getTranslation(Space.WORLD)
 		self.assertEqual(result.x, 10)
 
 	def test_rotation(self):
 		rotation = om.MVector(90,0,0)
-		self.transform.setEulerRotation(rotation)
+		self.transform.setRotation(rotation)
 		
-		result = self.transform.eulerRotation()
+		result = self.transform.getRotation()
 		self.assertEqual(result.x, 90)
 
 	def test_vectorRadiansToDegrees(self):

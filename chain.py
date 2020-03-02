@@ -67,8 +67,8 @@ class Chain(object):
 			#align
 			inputJointTransform = mutil.Transform(jnt)
 			jointTransform = mutil.Transform(dagNodeChainJoint.getPath())	
-			jointTransform.setTranslation(inputJointTransform.translation(), mutil.Space.WORLD)
-			jointTransform.setEulerRotation(inputJointTransform.eulerRotation())
+			jointTransform.setTranslation(inputJointTransform.getTranslation(), mutil.Space.WORLD)
+			jointTransform.setRotation(inputJointTransform.getRotation())
 
 			self._joints.append(name)
 
