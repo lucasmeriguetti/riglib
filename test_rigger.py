@@ -47,7 +47,7 @@ class TestRigger(unittest.TestCase):
 
 		self.assertEqual(len(containerAttrConnections), result)
 
-
+	
 def runTests():
 	print ("\n TEST RIGGER")
 	testCases = [TestRigger]

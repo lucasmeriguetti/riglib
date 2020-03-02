@@ -9,8 +9,9 @@ import riglib.mutil as mutil
 reload (mutil)
 
 class Rigger(Chain):
-	def __init__(self, chain, name = "DefaultRigger"):
+	def __init__(self, chain, name = "DefaultRigger", weightAttr = 1):
 		self._chain = chain 
+		self._weightAttr = weightAttr;
 
 		super(Rigger, self).__init__(joints = self._chain.getJoints(), name = name)
 		self.addWeightAttrToChain()
@@ -38,4 +39,7 @@ class Rigger(Chain):
 				if self._name in pW:
 					chainContainer.connect(sourceAttrName, sConst, sW)
 
-		
+	def setRiggerWeightAttr(self, value):
+		STILL NEED TO TEST IT 
+		self._chain.getContainer().setAttr(self._name, value)
+

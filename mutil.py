@@ -131,6 +131,29 @@ class DagNode(object):
 	def getMObject(self):
 		return self._fnDagNode.object()
 
+	def listAttr(self):
+		pass
+
+	def setAttr(self, attribute, value):
+		if not self.attributeExists(attribute):
+			return cmds.error("Attribute does not exist.")
+
+		mplug = self.findPlug(attribute)
+		mplug.setFloat(value)
+
+	def getAttr(self, attribute):
+		if not self.attributeExists(attribute):
+			return cmds.error("Attribute does not exist.")
+
+		mplug = self.findPlug(attribute)
+		return mplug.asFloat()
+
+	def attributeExists(self, attribute):
+		if self._fnDagNode.hasAttribute(attribute):
+			return True 
+
+		return False 
+		
 	def addAttr(self,longName = None, shortName = None, 
 		type = "float", maxValue = 1.0,	minValue = 0.0,
 		defaultValue = 0.0,	keyable = True	):

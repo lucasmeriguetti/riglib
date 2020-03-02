@@ -12,8 +12,6 @@ reload (riglib.tests_functions)
 from riglib.tests_functions import deleteSceneNodes, createSceneJoints
 
 
-
-
 class TestSelectionList(unittest.TestCase):
 
 	def setUp(self):
@@ -139,7 +137,17 @@ class TestDagNode(unittest.TestCase):
 		plug = self.dag.findPlug("tx")
 		self.assertEqual(type(plug), om.MPlug)
 
+	def test_getAttr(self):
+		t1 = DagNode.create("transform", name = "node1")
+		attr = cmds.getAttr("node1.tx")
+		result = t1.getAttr("tx")
+		self.assertEqual(result, attr)
 
+	def test_setAttr(self):
+		t1 = DagNode.create("transform", name = "node1")
+		t1.setAttr("tx", 10)
+		result = t1.getAttr("tx")
+		self.assertEqual(result, 10)
 
 def runTests():
 	print ("\n TEST MUTIL")
